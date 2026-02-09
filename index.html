@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>超级玛丽 H5</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <header class="hud">
+      <div><span>得分</span><strong id="score">0</strong></div>
+      <div><span>金币</span><strong id="coins">0</strong></div>
+      <div><span>生命</span><strong id="lives">3</strong></div>
+      <div><span>关卡</span><strong>1-1</strong></div>
+    </header>
+
+    <section class="canvas-wrap">
+      <canvas id="game" width="960" height="540" aria-label="超级玛丽游戏画面"></canvas>
+      <div id="message" class="message hidden"></div>
+    </section>
+
+    <section class="mobile-controls" aria-label="触屏控制区">
+      <div class="left-pad">
+        <div id="joystick" class="joystick" aria-label="移动摇杆">
+          <div id="joystick-knob" class="joystick-knob"></div>
+        </div>
+      </div>
+      <div class="right-pad">
+        <button id="btn-jump" aria-label="跳跃">跳跃</button>
+        <button id="btn-run" aria-label="加速">冲刺</button>
+      </div>
+    </section>
+
+    <p class="tips">PC：方向键移动，Z 冲刺，空格/↑ 跳跃。手机：左侧摇杆移动，右侧按钮跳跃/冲刺。</p>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
