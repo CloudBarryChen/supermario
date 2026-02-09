@@ -22,8 +22,9 @@
 
     <section class="mobile-controls" aria-label="触屏控制区">
       <div class="left-pad">
-        <button id="btn-left" aria-label="向左">◀</button>
-        <button id="btn-right" aria-label="向右">▶</button>
+        <div id="joystick" class="joystick" aria-label="移动摇杆">
+          <div id="joystick-knob" class="joystick-knob"></div>
+        </div>
       </div>
       <div class="right-pad">
         <button id="btn-jump" aria-label="跳跃">跳跃</button>
@@ -31,7 +32,7 @@
       </div>
     </section>
 
-    <p class="tips">PC：方向键移动，Z 冲刺，空格/↑ 跳跃。手机：使用屏幕按钮控制。</p>
+    <p class="tips">PC：方向键移动，Z 冲刺，空格/↑ 跳跃。手机：左侧摇杆移动，右侧按钮跳跃/冲刺。</p>
   </main>
 
   <script src="game.js"></script>

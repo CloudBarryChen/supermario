@@ -15,6 +15,12 @@ const input = {
   run: false,
 };
 
+const joystick = {
+  active: false,
+  pointerId: null,
+  axisX: 0,
+};
+
 const world = {
   gravity: 0.65,
   friction: 0.82,
@@ -135,10 +141,9 @@ function addInputListeners() {
     }
   });
 
-  bindButton("btn-left", "left");
-  bindButton("btn-right", "right");
   bindButton("btn-jump", "jump");
   bindButton("btn-run", "run");
+  bindJoystick();
 }
 
 function bindButton(id, key) {
@@ -159,6 +164,59 @@ function bindButton(id, key) {
   });
 }
 
+
+function bindJoystick() {
+  const base = document.getElementById("joystick");
+  const knob = document.getElementById("joystick-knob");
+  if (!base || !knob) return;
+
+  const updateAxis = (clientX, clientY) => {
+    const rect = base.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const maxDistance = rect.width * 0.32;
+
+    const dx = clientX - centerX;
+    const dy = clientY - centerY;
+    const distance = Math.hypot(dx, dy);
+    const clamped = distance > maxDistance ? maxDistance / distance : 1;
+
+    const offsetX = dx * clamped;
+    const offsetY = dy * clamped;
+    joystick.axisX = offsetX / maxDistance;
+    knob.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+  };
+
+  const resetStick = () => {
+    joystick.active = false;
+    joystick.pointerId = null;
+    joystick.axisX = 0;
+    knob.style.transform = "translate(-50%, -50%)";
+  };
+
+  base.addEventListener("pointerdown", (e) => {
+    joystick.active = true;
+    joystick.pointerId = e.pointerId;
+    base.setPointerCapture(e.pointerId);
+    updateAxis(e.clientX, e.clientY);
+    e.preventDefault();
+  });
+
+  base.addEventListener("pointermove", (e) => {
+    if (!joystick.active || e.pointerId !== joystick.pointerId) return;
+    updateAxis(e.clientX, e.clientY);
+    e.preventDefault();
+  });
+
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach((eventName) => {
+    base.addEventListener(eventName, (e) => {
+      if (joystick.pointerId !== null && e.pointerId !== joystick.pointerId) return;
+      resetStick();
+      e.preventDefault();
+    });
+  });
+}
+
 function update() {
   if (state.status !== "playing") {
     if (state.respawnTimer > 0) {
@@ -172,18 +230,19 @@ function update() {
     return;
   }
 
+  const moveIntent = joystick.active ? joystick.axisX : (input.right ? 1 : 0) - (input.left ? 1 : 0);
   const accel = input.run ? 0.72 : 0.45;
   const speedCap = world.maxSpeed + (input.run ? world.runBoost : 0);
 
-  if (input.left) {
-    player.vx -= accel;
+  if (moveIntent < -0.08) {
+    player.vx += moveIntent * accel;
     player.facing = -1;
   }
-  if (input.right) {
-    player.vx += accel;
+  if (moveIntent > 0.08) {
+    player.vx += moveIntent * accel;
     player.facing = 1;
   }
-  if (!input.left && !input.right) {
+  if (Math.abs(moveIntent) <= 0.08) {
     player.vx *= world.friction;
     if (Math.abs(player.vx) < 0.08) player.vx = 0;
   }

@@ -84,23 +84,49 @@ canvas {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-}
-
-.mobile-controls button {
-  width: min(22vw, 84px);
-  height: min(22vw, 84px);
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  background: rgba(9, 24, 59, 0.75);
-  color: #fff;
-  font-size: 22px;
-  font-weight: 700;
+  align-items: center;
+  touch-action: none;
 }
 
 .left-pad,
 .right-pad {
   display: flex;
   gap: 10px;
+  align-items: center;
+}
+
+.joystick {
+  width: min(34vw, 140px);
+  height: min(34vw, 140px);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: radial-gradient(circle at 35% 30%, rgba(82, 120, 197, 0.45), rgba(7, 24, 63, 0.85));
+  position: relative;
+  touch-action: none;
+}
+
+.joystick-knob {
+  width: min(14vw, 58px);
+  height: min(14vw, 58px);
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 38% 35%, rgba(255, 255, 255, 0.5), rgba(25, 45, 88, 0.95));
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-controls button {
+  width: min(21vw, 82px);
+  height: min(21vw, 82px);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(9, 24, 59, 0.75);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .tips {
@@ -110,8 +136,14 @@ canvas {
 }
 
 @media (min-width: 840px) {
-  .mobile-controls {
-    max-width: 560px;
+  .joystick {
+    width: 132px;
+    height: 132px;
+  }
+
+  .joystick-knob {
+    width: 56px;
+    height: 56px;
   }
 
   .mobile-controls button {
